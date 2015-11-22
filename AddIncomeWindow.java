@@ -25,73 +25,94 @@ import javafx.stage.Stage;
  */
 public class AddIncomeWindow {
     
+  
+    
    static void display(){
-       //create stage
-      Stage secondWindow = new Stage();
-      secondWindow.initModality(Modality.APPLICATION_MODAL);
-      secondWindow.setTitle("Add income form");
-      secondWindow.setMinWidth(450);
-       secondWindow.setMinHeight(280);
-      
-      ///create a label
-      Label labelItype = new Label("Income Type:");
-      Label labelSuma = new Label("Value:  ");
-      Label labelExplicatie =  new Label("Explanation: ");
-      Label labelData = new Label("Income date: ");
-      Label labelRecursiva = new Label("Recursiv: ");
-      
-       //create choiceBox
-      ChoiceBox incomeType = new ChoiceBox();
-        //get income types
-        
-          try{
-             Map  <Integer, String> incomeMap =  Income.getIncomeTypes();
-                 for( Integer  key  : incomeMap.keySet() ){
-                    String incomeName = incomeMap.get(key);
-                    int incomeTypeId = key;
-                    System.out.println( "id: "+ incomeTypeId +" incomeName: " +incomeName);
-                        incomeType.getItems().add(incomeName);
-                 }
-             }catch(SQLException er){   
-                 System.out.println(er);
-             }
-        incomeType.setValue("salaries");
        
-      TextField suma = new TextField();
-      TextField explicatie =  new TextField();
-      DatePicker data = new DatePicker();
-      CheckBox recursiv = new CheckBox();
-      
-    //create layout
-      GridPane layout = new GridPane();
-      
-      
-       //create button
-     Button addIncomeButton =  new Button("Add Income");
- 
-     //on click income buttone
-     addIncomeButton.setOnAction(e ->{
-         //check for null
-         
-         if ( suma.getText().isEmpty() ){
-             AlertBox.display("Alerta","Campul Suma este gol",300, 200);
-        
-             System.out.println("ALERTA!");
-         }else{
-                //validation for integer
-                try{
-                   Integer.parseInt(suma.getText());
-               }catch(Exception er){
-                   AlertBox.display("Alerta","Acest camp primeste doar cifre",300, 200);
-               }
-         
-         }
-         
+       
+       //create stage
+        Stage secondWindow = new Stage();
+        secondWindow.initModality(Modality.APPLICATION_MODAL);
+        secondWindow.setTitle("Add income form");
+        secondWindow.setMinWidth(450);
+         secondWindow.setMinHeight(280);
+
+        ///create a label
+        Label labelItype = new Label("Income Type:");
+        Label labelSuma = new Label("Value:  ");
+        Label labelExplicatie =  new Label("Explanation: ");
+        Label labelData = new Label("Income date: ");
+        Label labelRecursiva = new Label("Recursiv: ");
+
+         //create choiceBox
+        ChoiceBox <String> incomeType = new ChoiceBox();
      
-         System.out.println("clicka clicka: ");
-         //check for empty fields
-         
-     });
+        //get income types
+        try{
+            Map  <Integer, String> incomeMap =  Income.getIncomeTypes();
+            for( Integer  key  : incomeMap.keySet() ){
+                  String incomeName = incomeMap.get(key);
+                  int incomeTypeId = key;
+                  incomeType.getItems().add(incomeName);
+            }
+        }catch(SQLException er){   
+               System.out.println(er);
+        }
+        incomeType.getItems().add("Choose Income");  
+        incomeType.setValue("Choose Income");
+        
+        TextField suma = new TextField();
+        TextField explicatie =  new TextField();
+        DatePicker data = new DatePicker();
+        CheckBox recursiv = new CheckBox();
+      
+        //create layout
+        GridPane layout = new GridPane();
+      
+      
+         //create button
+        Button addIncomeButton =  new Button("Add Income");
+ 
+        //on click income buttone
+        addIncomeButton.setOnAction(e ->{
+        
+            //check for empty income
+            if(suma.getText().isEmpty()){
+               
+            //}catch(Exception sum){
+                AlertBox.display("Alerta","Field sum is empty",300, 200);
+            }else{
+                try{
+                   int sumVal = Integer.parseInt(suma.getText());
+                   
+                }catch(Exception er){
+                    AlertBox.display("Alerta","Value field require only nr's",300, 200);
+                }
+                
+                  //check incomeType to be chosen
+            String TypeVal = incomeType.getValue();
+            if( TypeVal  ==  "Choose Income" ){
+               AlertBox.display("Alerta","Chose an income type",300, 200);
+            }
+               String explVal = explicatie.getText();
+            if(explicatie.getText().isEmpty() ){
+                AlertBox.display("Alerta","Small explanation required",300, 200);
+            }
+            
+            try{
+                 String dataVal = data.getValue().toString();
+                 
+            }catch(Exception dat){
+                AlertBox.display("Alerta","Please choose a date",300, 200);
+            }
+            
+              int sumVal = Integer.parseInt(suma.getText());    
+              String dataVal = data.getValue().toString();
+              System.out.println( sumVal +dataVal  + explVal);
+        }   
+      
+         //create a confirmation window with data
+      });
      
      layout.setConstraints(labelItype,1,1);
      layout.setConstraints(labelSuma,1,2);
